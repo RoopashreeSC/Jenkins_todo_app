@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div id="main-content">
+        <h1>To-Do List</h1>
+
+        <form method="POST">
+            <input type="text" name="task" placeholder="Enter task" required>
+            <button type="submit">Add</button>
+        </form>
+
+        <ul>
+            {% for task in tasks %}
+            <li>
+                {% if task.done %}
+                <strike>{{ task.task }}</strike>
+                {% else %}
+                {{ task.task }}
+                {% endif %}
+                <a href="{{ url_for('complete', task_id=loop.index0) }}">Done</a>
+                <a href="{{ url_for('delete', task_id=loop.index0) }}">Delete</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Compliment Modal -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div id="compliment-modal" class="modal">
+            <div class="modal-content">
+                <p>{{ messages[0] }}</p>
+                <button id="commit-btn">I'm committed</button>
+            </div>
+        </div>
+        <script>
+            // Show modal
+            document.getElementById('compliment-modal').style.display = 'block';
+            // Blur background
+            document.getElementById('main-content').classList.add('blur');
+
+            // Close modal when button clicked
+            document.getElementById('commit-btn').onclick = function() {
+                document.getElementById('compliment-modal').style.display = 'none';
+                document.getElementById('main-content').classList.remove('blur');
+            }
+        </script>
+        {% endif %}
+    {% endwith %}
+</body>
+</html>
