@@ -1,5 +1,6 @@
 pipeline {
     agent any
+
     environment {
         VENV_DIR = "venv"
         PYTHON = "python"
@@ -7,6 +8,7 @@ pipeline {
     }
 
     stages {
+
         stage('Clone Repo') {
             steps {
                 git branch: 'main', url: 'https://github.com/RoopashreeSC/Jenkins_todo_app.git'
@@ -25,15 +27,20 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                bat """call ${VENV_DIR}\\Scripts\\activate
-                pip install --upgrade pip
-                pip install -r requirements.txt"""
+                bat """
+                call ${VENV_DIR}\\Scripts\\activate
+                python -m pip install --upgrade pip
+                pip install -r requirements.txt
+                """
             }
         }
 
-        stage('Run App') {
+        stage('Run App (Background)') {
             steps {
-                bat """start cmd /c call ${VENV_DIR}\\Scripts\\activate && python app.py"""
+                bat """
+                call ${VENV_DIR}\\Scripts\\activate
+                start "" python app.py
+                """
             }
         }
     }
