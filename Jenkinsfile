@@ -35,11 +35,11 @@ pipeline {
             }
         }
 
-        stage('Run App (Background)') {
+        stage('Run App') {
             steps {
                 bat """
-                call ${VENV_DIR}\\Scripts\\activate
-                start "" python app.py
+                call venv\\Scripts\\activate
+                python app.py
                 """
             }
         }
