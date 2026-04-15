@@ -1,14 +1,11 @@
 pipeline {
     agent any
-
     environment {
         VENV_DIR = "venv"
         PYTHON = "python"
         APP_PORT = "5000"
     }
-
     stages {
-
         stage('Clone Repo') {
             steps {
                 git branch: 'main', url: 'https://github.com/RoopashreeSC/Jenkins_todo_app.git'
@@ -38,8 +35,8 @@ pipeline {
         stage('Run App') {
             steps {
                 bat """
-                call venv\\Scripts\\activate
-                python app.py
+                start "" /B cmd /c "call venv\\Scripts\\activate && python app.py > flask.log 2>&1"
+                timeout /t 5 /nobreak
                 """
             }
         }
